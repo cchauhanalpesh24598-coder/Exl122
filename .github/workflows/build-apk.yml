@@ -1,0 +1,89 @@
+name: Build Android APK (Direct - No Expo Token)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:  # Manual trigger button
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Expo CLI
+        run: npm install -g expo-cli @expo/ngrok
+
+      - name: Generate Native Android Project
+        run: npx expo prebuild --platform android --clean
+
+      - name: Make Gradlew Executable
+        run: chmod +x android/gradlew
+
+      - name: Build APK with Gradle
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Find and Rename APK
+        run: |
+          APK_PATH=$(find android/app/build/outputs/apk -name "*.apk" | head -1)
+          cp "$APK_PATH" ./ocr-excel-app.apk
+          echo "APK built successfully: ocr-excel-app.apk"
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: ocr-excel-app.apk
+          retention-days: 30
+
+      - name: Create GitHub Release
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          files: ocr-excel-app.apk
+          body: |
+            ## OCR Excel App - Android APK
+            
+            ### What's New
+            - Build from commit: ${{ github.sha }}
+            - Build number: ${{ github.run_number }}
+            
+            ### Download & Install
+            1. Download `ocr-excel-app.apk` below
+            2. Phone Settings > Enable "Install from unknown sources"
+            3. Open downloaded APK
+            4. Tap "Install"
+            
+            ### App Features
+            - WhatsApp message parsing (Bank, Applicant, Reason)
+            - Photo OCR for GPS coordinates
+            - Excel export (.xlsx)
+            - Bulk processing (10 messages = 10 rows)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
