@@ -46,6 +46,13 @@ jobs:
       - name: Generate Native Android Project
         run: npx expo prebuild --platform android --clean
 
+      - name: Fix Gradle Version
+        run: |
+          cd android
+          sed -i 's|distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.0.1-all.zip|' gradle/wrapper/gradle-wrapper.properties
+          echo "Gradle wrapper fixed:"
+          cat gradle/wrapper/gradle-wrapper.properties
+
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
 
