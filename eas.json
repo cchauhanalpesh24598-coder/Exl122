@@ -1,59 +1,28 @@
 {
-  "expo": {
-    "name": "OCR Excel App",
-    "slug": "chnalp",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.ocrexcel.app"
+  "cli": {
+    "version": ">= 5.9.1",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
     },
-    "android": {
-      "package": "com.ocrexcel.app",
-      "permissions": [
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.CAMERA"
-      ],
-      "intentFilters": [
-        {
-          "action": "android.intent.action.SEND",
-          "category": ["android.intent.category.DEFAULT"],
-          "data": [
-            { "mimeType": "text/plain" },
-            { "mimeType": "image/*" }
-          ]
-        },
-        {
-          "action": "android.intent.action.SEND_MULTIPLE",
-          "category": ["android.intent.category.DEFAULT"],
-          "data": [
-            { "mimeType": "text/plain" },
-            { "mimeType": "image/*" }
-          ]
-        }
-      ]
+    "preview": {
+      "android": {
+        "buildType": "apk",
+        "image": "ubuntu-22.04-jdk-17-ndk-r21e"
+      },
+      "distribution": "internal"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
-          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos."
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    },
-    "scheme": "ocrexcel",
-    "extra": {
-      "eas": {
-        "projectId": "4fbaafe3-b114-4fe0-89eb-140cd1be173d"
+    "production": {
+      "android": {
+        "buildType": "apk",
+        "image": "ubuntu-22.04-jdk-17-ndk-r21e"
       }
     }
+  },
+  "submit": {
+    "production": {}
   }
 }
