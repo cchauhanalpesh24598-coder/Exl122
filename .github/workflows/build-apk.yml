@@ -33,7 +33,7 @@ jobs:
       - name: Build APK via EAS
         run: eas build --platform android --profile preview --non-interactive --no-wait
 
-      - name: Wait and Download APK
+      - name: Build Submitted
         run: |
-          echo "Build submitted to EAS"
-          echo "Download from: https://expo.dev/accounts/[your-username]/projects/ocr-excel-app/builds"
+          echo "✅ Build EAS pe submit ho gaya!"
+          echo "APK download karo: https://expo.dev/accounts/chnalp/projects/ocr-excel-app/builds"
