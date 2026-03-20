@@ -59,6 +59,11 @@
     "experiments": {
       "typedRoutes": true
     },
-    "scheme": "ocrexcel"
+    "scheme": "ocrexcel",
+    "extra": {
+      "eas": {
+        "projectId": "4fbaafe3-b114-4fe0-89eb-140cd1be173d"
+      }
+    }
   }
 }
